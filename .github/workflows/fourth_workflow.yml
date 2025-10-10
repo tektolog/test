@@ -9,7 +9,7 @@ jobs:
   hello-command:
     runs-on: ubuntu-latest
     steps:
-      - name: List files
-        run: echo "Hello"
+      - name: Text Hello
+        run: echo "Hello !"
       
 
