@@ -1,5 +1,4 @@
 <?php
-
 // Простой webhook для Telegram
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $input = json_decode(file_get_contents('php://input'), true);
@@ -27,3 +26,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     echo "<p>Server time: " . date('Y-m-d H:i:s') . "</p>";
     echo "<p>Use this URL for Telegram webhook</p>";
 }
+
+// some comment
