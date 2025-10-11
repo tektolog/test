@@ -7,7 +7,7 @@ jobs:
     environment: "staging"
     steps:
       - name: First Step
-        run: sleep 30
+        run: exit 1
       - name: Runs on Canceled
         if: ${{ cancelled() }}
         run: echo "Runs on Canceled"
