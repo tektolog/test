@@ -25,7 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     echo "<h1>Webhook Server is Running!</h1>";
     echo "<p>Server time: " . date('Y-m-d H:i:s') . "</p>";
     echo "<p>Use this URL for Telegram webhook</p>";
-    echo "<p>test</p>";
+    echo "<p>test tar</p>";
 }
 
 // some comment

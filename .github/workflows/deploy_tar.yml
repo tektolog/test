@@ -1,0 +1,49 @@
+name: Deploy to Server
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Create clean tar archive
+      run: |
+        # Создаем tar архив без исключенных файлов
+        tar -czf deploy.tar.gz \
+          --exclude='.git' \
+          --exclude='.github' \
+          --exclude='.gitignore' \
+          --exclude='nginx.conf' \
+          --exclude='docker-compose.yml' \
+          --exclude='Dockerfile-php' \
+          --exclude='*.log' \
+          --exclude='app/config.php' \
+          .
+
+    - name: Deploy archive via SCP
+      uses: appleboy/scp-action@v0.1.3
+      with:
+        host: ${{ secrets.SERVER_HOST }}
+        username: ${{ secrets.SERVER_USER }}
+        key: ${{ secrets.SERVER_SSH_KEY }}
+        source: "deploy.tar.gz"
+        target: "/home/webwell/server/www/wellnessexpert/"
+        overwrite: true
+
+    - name: Extract and cleanup on server
+      uses: appleboy/ssh-action@v0.1.10
+      with:
+        host: ${{ secrets.SERVER_HOST }}
+        username: ${{ secrets.SERVER_USER }}
+        key: ${{ secrets.SERVER_SSH_KEY }}
+        script: |
+          cd /home/webwell/server/www/wellnessexpert/
+          tar -xzf deploy.tar.gz -C app --strip-components=0
+          rm deploy.tar.gz
+          echo "Deployment completed successfully!"
