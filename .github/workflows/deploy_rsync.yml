@@ -1,0 +1,38 @@
+name: Deploy to Server Rsync
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Create clean deployment package
+      run: |
+        # Создаем временную папку без служебных файлов
+        mkdir -p deploy_temp
+        # Копируем только нужные файлы, исключая .git и .github
+        rsync -av --progress ./ deploy_temp/ \
+          --exclude='.git' \
+          --exclude='.github' \
+          --exclude='.gitignore' \
+          --exclude='nginx.conf' \
+          --exclude='docker-compose.yml' \
+          --exclude='Dockerfile-php' \
+          --exclude='*.log' \
+          --exclude='/app/config.php'
+        
+    - name: Deploy via Rsync
+      uses: burnett01/rsync-deployments@5.2.1
+      with:
+        switches: -avzr --delete
+        path: deploy_temp/
+        remote_path: /home/webwell/server/www/wellnessexpert/
+        remote_host: ${{ secrets.SERVER_HOST }}
+        remote_user: ${{ secrets.SERVER_USER }}
+        remote_key: ${{ secrets.SERVER_SSH_KEY }}
