@@ -1,0 +1,36 @@
+name: Deploy to Server via Rsync
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Create exclude file
+      run: |
+        cat > .rsync-exclude << EOF
+        .git
+        .github
+        .gitignore
+        nginx.conf
+        docker-compose.yml
+        Dockerfile-php
+        *.log
+        app/config.php
+        EOF
+
+    - name: Deploy via Rsync
+      uses: burnett01/rsync-deployments@5.2.1
+      with:
+        switches: -avz --delete --exclude-from=.rsync-exclude
+        path: ./
+        remote_path: /home/webwell/server/www/wellnessexpert/
+        remote_host: ${{ secrets.SERVER_HOST }}
+        remote_user: ${{ secrets.SERVER_USER }}
+        remote_key: ${{ secrets.SERVER_SSH_KEY }}
