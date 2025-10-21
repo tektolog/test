@@ -1,4 +1,4 @@
-name: Deploy to Server
+name: Deploy to Server UPD
 
 on:
   push:
@@ -12,27 +12,12 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
       
-    - name: Create clean deployment package
-      run: |
-        # Создаем временную папку без служебных файлов
-        mkdir -p deploy_temp
-        # Копируем только нужные файлы, исключая .git и .github
-        rsync -av --progress ./ deploy_temp/ \
-          --exclude='.git' \
-          --exclude='.github' \
-          --exclude='.gitignore' \
-          --exclude='nginx.conf' \
-          --exclude='docker-compose.yml' \
-          --exclude='Dockerfile-php' \
-          --exclude='*.log' \
-          --exclude='/app/config.php'
-        
-    - name: Deploy via Rsync
-      uses: burnett01/rsync-deployments@5.2.1
+    - name: Deploy to Server
+      uses: appleboy/scp-action@v0.1.3
       with:
-        switches: -avzr --delete
-        path: deploy_temp/
-        remote_path: /home/webwell/server/
-        remote_host: ${{ secrets.SERVER_HOST }}
-        remote_user: ${{ secrets.SERVER_USER }}
-        remote_key: ${{ secrets.SERVER_SSH_KEY }}
+        host: ${{ secrets.SERVER_HOST }}
+        username: ${{ secrets.SERVER_USER }}
+        key: ${{ secrets.SERVER_SSH_KEY }}
+        source: "./*"
+        target: "/home/webwell/server/www/wellnessexpert/"
+        overwrite: true
