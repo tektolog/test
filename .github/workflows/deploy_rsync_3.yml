@@ -1,0 +1,41 @@
+name: Deploy to Server Smart (test)
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Create exclude file
+      run: |
+        cat > .rsync-exclude << EOF
+        .git
+        .github
+        .gitignore
+        nginx.conf
+        docker-compose.yml
+        Dokerfile-php
+        *.log
+        EOF
+
+    - name: Deploy with protected folders
+      run: |
+        mkdir -p ~/.ssh
+        echo "${{ secrets.SERVER_SSH_KEY }}" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+        ssh-keyscan -H ${{ secrets.SERVER_HOST }} >> ~/.ssh/known_hosts
+        
+        # Используем --delete, но защищаем важные папки
+        rsync -avz \
+          --delete \
+          --exclude-from=.rsync-exclude \
+          -e "ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no" \
+          ./ ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}:/home/webwell/server/www/wellnessexpert/
+        
+        rm -f ~/.ssh/id_rsa
