@@ -24,10 +24,7 @@ jobs:
         *.log
         app/config.php
         # Защищенные папки - исключаем из любых операций
-        app/public/adminlte/ckeditor
-        app/public/adminlte/ckfinder/*
-        app/public/adminlte/dist
-        app/public/adminlte/plugins
+        app/public/       
         !app/public/adminlte/ckfinder/config.php
         protected/
         public/
