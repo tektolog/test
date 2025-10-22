@@ -24,7 +24,7 @@ jobs:
         *.log
         # Защищенные папки - исключаем из любых операций
         protected/
-        public/
+        /public/
         EOF
 
     - name: Deploy with protected folders
