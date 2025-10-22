@@ -27,6 +27,7 @@ jobs:
         app/public/
         protected/
         public/
+        !public/adminlte/ckfinder/config.php
         EOF
 
     - name: Deploy with protected folders
