@@ -26,8 +26,7 @@ jobs:
         # Защищенные папки - исключаем из любых операций
         protected/
         public/
-        app/public/adminlte/ckfinder/*
-        !app/public/adminlte/ckfinder/config.php
+        app/public/
         EOF
 
     - name: Deploy with protected folders
@@ -43,5 +42,11 @@ jobs:
           --exclude-from=.rsync-exclude \
           -e "ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no" \
           ./ ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}:/home/webwell/server/www/wellnessexpert/
+
+        # Затем отдельно деплоим только config.php
+        rsync -avz \
+          -e "ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no" \
+          ./public/adminlte/ckfinder/config.php \
+          ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}:/home/webwell/server/www/wellnessexpert/public/adminlte/ckfinder/
         
         rm -f ~/.ssh/id_rsa
