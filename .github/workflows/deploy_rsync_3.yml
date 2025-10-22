@@ -22,6 +22,9 @@ jobs:
         docker-compose.yml
         Dokerfile-php
         *.log
+        # Защищенные папки - исключаем из любых операций
+        protected/
+        public/
         EOF
 
     - name: Deploy with protected folders
@@ -37,5 +40,11 @@ jobs:
           --exclude-from=.rsync-exclude \
           -e "ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no" \
           ./ ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}:/home/webwell/server/www/wellnessexpert/
+        
+        # подгружаем config.php отдельно
+        rsync -avz \
+          -e "ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no" \
+          ./app/public/adminlte/ckfinder/config.php \
+          ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}:/home/webwell/server/www/wellnessexpert/app/public/adminlte/ckfinder/config.php
         
         rm -f ~/.ssh/id_rsa
