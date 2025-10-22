@@ -23,7 +23,14 @@ jobs:
         Dokerfile-php
         *.log
         # Защищенные папки - исключаем из любых операций
-        protected/
+        app/config.php
+        app/public/adminlte/ckeditor
+        app/public/adminlte/ckfinder/**
+        !app/public/adminlte/ckfinder/
+        !app/public/adminlte/ckfinder/config.php
+        app/public/adminlte/dist
+        app/public/adminlte/plugins
+        /protected/
         /public/
         EOF
 
@@ -42,9 +49,9 @@ jobs:
           ./ ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}:/home/webwell/server/www/wellnessexpert/
         
         # подгружаем config.php отдельно
-        rsync -avz \
-          -e "ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no" \
-          ./app/public/adminlte/ckfinder/config.php \
-          ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}:/home/webwell/server/www/wellnessexpert/app/public/adminlte/ckfinder/config.php
+        # rsync -avz \
+          # -e "ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no" \
+          # ./app/public/adminlte/ckfinder/config.php \
+          # ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}:/home/webwell/server/www/wellnessexpert/app/public/adminlte/ckfinder/config.php
         
         rm -f ~/.ssh/id_rsa
