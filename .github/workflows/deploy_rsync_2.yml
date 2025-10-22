@@ -22,7 +22,9 @@ jobs:
         docker-compose.yml
         Dokerfile-php
         *.log
-        app/config.php        
+        app/config.php
+        # Защищенные папки - исключаем из любых операций
+        app/public/
         EOF
 
     - name: Deploy with protected folders
