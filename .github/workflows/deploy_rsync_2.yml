@@ -25,9 +25,9 @@ jobs:
         app/config.php
         # Защищенные папки - исключаем из любых операций
         app/public/
+        !app/public/adminlte/ckfinder/config.php
         protected/
         public/
-        !public/adminlte/ckfinder/config.php
         EOF
 
     - name: Deploy with protected folders
