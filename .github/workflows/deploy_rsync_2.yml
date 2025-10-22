@@ -26,6 +26,7 @@ jobs:
         # Защищенные папки - исключаем из любых операций
         protected/
         public/
+        app/public/adminlte/ckfinder/*
         !app/public/adminlte/ckfinder/config.php
         EOF
 
