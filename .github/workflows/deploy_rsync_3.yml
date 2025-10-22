@@ -23,8 +23,8 @@ jobs:
         Dokerfile-php
         *.log
         # Защищенные папки - исключаем из любых операций
-        protected/
-        public/
+        /protected/
+        /public/
         EOF
 
     - name: Deploy with protected folders
