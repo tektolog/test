@@ -1,6 +1,6 @@
 <?php
 
 const DEBUG = true;
-const DB_USER = 'user';
-const DB_PASS = 'password';
-const DB_HOST = 'mysql';
+const DB_USER = 'user2';
+const DB_PASS = 'password2';
+const DB_HOST = 'mysql2';
