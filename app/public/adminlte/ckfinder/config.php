@@ -1,5 +1,5 @@
 <?php
 
-const DEBUG = true;
+const DEBUG = 0;
 const DB_USER = 'user';
 const DB_PASS = 'pass';
